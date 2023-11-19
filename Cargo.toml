@@ -1,7 +1,18 @@
 [package]
-name = "UniSync"
+name = "studip-downloader"
 version = "0.1.0"
 edition = "2021"
+
+[[bin]]
+edition = "2021"
+name = "studip-downloader"
+path = "src/main.rs"
+authors = ["Khirath-bit"]
+license = "MIT"
+description = "A tool to sync documents and files from studip to a local folder structure"
+readme = "README.md"
+homepage = "https://github.com/Khirath-bit/studip-downloader"
+repository = "https://github.com/Khirath-bit/studip-downloader"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
