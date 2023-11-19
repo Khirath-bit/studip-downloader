@@ -40,8 +40,8 @@ pub async fn get_courses_by_semester(client:reqwest::Client, settings:&settings:
     .courses
     .into_iter()
     .filter(|(_, course)| {
-        course.start_semester.split('/').last().unwrap() == &semester.id
-            || course.end_semester.as_ref().unwrap_or(&("asd".to_owned())).split('/').last().unwrap() == &semester.id
+        course.start_semester.split('/').last().unwrap() == semester.id
+            || course.end_semester.as_ref().unwrap_or(&("asd".to_owned())).split('/').last().unwrap() == semester.id
     })
     .map(|(_, course)| course)
     .collect();

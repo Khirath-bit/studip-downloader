@@ -23,6 +23,3 @@ I recommend running this as task or service depending on your os.
 
 ## Notes
 This downloader replaces every special file/directory character forbidden in windows with an empty space.
-
-Todos:
-- [ ] Add wrapper for get requests
