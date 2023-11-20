@@ -1,16 +1,15 @@
 
 use std::{fs::File, io::BufReader, time::Instant};
-
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Settings {
     pub course_directory_path: String,
     pub university_base_api_url: String,
-    pub user_id: String,
     pub api_password: String,
     pub api_username: String,
-    pub download_period_cron: String
+    pub course_blacklist: Vec<String>,
+    pub download_videos: bool
 }
 
 impl Settings{

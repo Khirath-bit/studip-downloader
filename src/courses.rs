@@ -1,6 +1,7 @@
 use serde::Deserialize;
 
 use crate::{settings, semesters::Semester};
+use crate::get_authed;
 
 #[derive(Deserialize, Clone)]
 pub struct Course {
@@ -21,7 +22,7 @@ pub struct Courses {
     pub collection: CourseCollection
 }
 
-pub async fn get_courses_by_semester(client:reqwest::Client, settings:&settings::Settings, semester: Semester) -> Result<Vec<Course>, reqwest::Error> {        
+pub async fn get_courses_by_semester(settings:&settings::Settings, semester: Semester) -> Result<Vec<Course>, reqwest::Error> {        
     let user_id = "df10bd4a324818b5acaeece264767e1a";
     let limit = 150;
 
@@ -30,10 +31,7 @@ pub async fn get_courses_by_semester(client:reqwest::Client, settings:&settings:
         user_id, limit
     );
 
-    let courses = client.get(url)
-    .basic_auth(&settings.api_username, Some(&settings.api_password))
-    .send().await?
-    .json::<Courses>().await?;
+    let courses = get_authed::<Courses>(url, settings).await?;
 
     let current_semester_courses: Vec<Course> = courses
     .collection

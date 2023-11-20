@@ -2,6 +2,7 @@ use std::time::SystemTime;
 use serde::Deserialize;
 
 use crate::settings;
+use crate::get_authed;
 
 #[derive(Deserialize)]
 pub struct Semester {
@@ -22,10 +23,9 @@ pub struct Semesters {
     pub collection: SemesterCollection
 }
 
-pub async fn get_current_semester(client:reqwest::Client, settings:&settings::Settings) -> Result<Semester, reqwest::Error> {
-    let semester = client.get(settings.university_base_api_url.clone() + "/semesters")
-                .send().await?
-                .json::<Semesters>().await?;
+pub async fn get_current_semester(settings:&settings::Settings) -> Result<Semester, reqwest::Error> {
+    let semester = get_authed::<Semesters>
+        (settings.university_base_api_url.clone() + "/semesters", settings).await?;
 
     let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs();
     let sem = semester.collection.semesters.into_iter()
