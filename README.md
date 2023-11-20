@@ -1,5 +1,6 @@
 # Studip course file downloader
 
+[![Actions Status](https://github.com/Khirath-bit/studip-downloader/workflows/Build/badge.svg)](https://github.com/Khirath-bit/studip-downloader/actions) 
 [![Releases](https://img.shields.io/github/v/release/Khirath-bit/studip-downloader)](https://github.com/Khirath-bit/studip-downloader/releases)
 
 Small syncing app to always be up to date on documents and never be forced to download them manually from studip.
