@@ -2,6 +2,7 @@ use std::{path::Path, fs, io::Write};
 use bytes::Bytes;
 use serde::Deserialize;
 use async_recursion::async_recursion;
+use filetime_creation::{FileTime, set_file_ctime};
 use crate::{courses::Course, settings::Settings};
 use crate::get_authed;
 use crate::get_client;
@@ -13,7 +14,8 @@ struct UniFile {
     pub id: String,
     pub name: String,
     pub is_downloadable: bool,
-    pub mime_type: String
+    pub mime_type: String,
+    pub chdate: i64
 }
 
 #[derive(Deserialize)]
@@ -88,9 +90,12 @@ impl Course{
             let fp = &(folder.path.clone().unwrap() + "\\" + &sanitized_name);
             let f_path = Path::new(fp);
 
-            if !f_path.exists() {
+            if !f_path.exists() || FileTime::from(fs::metadata(f_path).unwrap().created().unwrap()) != FileTime::from_unix_time(file.chdate, 0) {
                 let file_data = download_file(file.id, settings).await?;
-                let mut f = fs::File::create(f_path).unwrap();
+                let mut f: fs::File = fs::File::create(f_path).unwrap();
+                if set_file_ctime(f_path, FileTime::from_unix_time(file.chdate, 0)).is_err() {
+                    cl.push_str(&("     ERROR: Failed to download ".to_owned() + &sanitized_name + " because created date couldnt be set\n"));
+                }
 
                 if f.write_all(&file_data).is_err() {
                     cl.push_str(&("     ERROR: Failed to download ".to_owned() + &sanitized_name + "\n"));
